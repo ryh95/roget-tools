@@ -1,33 +1,33 @@
-import cPickle
+import _pickle as cPickle
 class Roget:
     def __init__(self):
-        with open('roget/thes_dict.txt','r') as f:
-            self.thes_dict = cPickle.load(f)
-        with open('roget/thes_cat.txt','r') as f:
-            self.thes_cat = cPickle.load(f)
-        with open('roget/thes_cat_list.txt','r') as f:
-            self.thes_cat_list = cPickle.load(f)
-        with open('roget/cat_num.txt','r') as f:
-            self.cat_num = cPickle.load(f)
-        with open('roget/basecat_dict.txt','r') as f:
-            self.basecat_dict = cPickle.load(f)
-        with open('roget/parent_dict.txt','r') as f:
-            self.parent_dict = cPickle.load(f)
-        with open('roget/node_codes.txt','r') as f:
-            self.node_codes = cPickle.load(f)
-        with open('roget/code_nodes.txt','r') as f:
-            self.code_nodes = cPickle.load(f)
-        with open('roget/basecat_parent.txt','r') as f:
-            self.basecat_parent = cPickle.load(f)
-        with open('roget/node_child-parent.txt','r') as f:
-            self.node_childparent = cPickle.load(f)
-        with open('roget/full_childparent.txt','r') as f:
-            self.full_childparent = cPickle.load(f)
-        with open('roget/num_cat.txt','r') as f:
-            self.num_cat = cPickle.load(f)
+        with open('roget/thes_dict.txt','rb') as f:
+            self.thes_dict = cPickle.load(f,encoding='latin1')
+        with open('roget/thes_cat.txt','rb') as f:
+            self.thes_cat = cPickle.load(f,encoding='latin1')
+        with open('roget/thes_cat_list.txt','rb') as f:
+            self.thes_cat_list = cPickle.load(f,encoding='latin1')
+        with open('roget/cat_num.txt','rb') as f:
+            self.cat_num = cPickle.load(f,encoding='latin1')
+        with open('roget/basecat_dict.txt','rb') as f:
+            self.basecat_dict = cPickle.load(f,encoding='latin1')
+        with open('roget/parent_dict.txt','rb') as f:
+            self.parent_dict = cPickle.load(f,encoding='latin1')
+        with open('roget/node_codes.txt','rb') as f:
+            self.node_codes = cPickle.load(f,encoding='latin1')
+        with open('roget/code_nodes.txt','rb') as f:
+            self.code_nodes = cPickle.load(f,encoding='latin1')
+        with open('roget/basecat_parent.txt','rb') as f:
+            self.basecat_parent = cPickle.load(f,encoding='latin1')
+        with open('roget/node_child-parent.txt','rb') as f:
+            self.node_childparent = cPickle.load(f,encoding='latin1')
+        with open('roget/full_childparent.txt','rb') as f:
+            self.full_childparent = cPickle.load(f,encoding='latin1')
+        with open('roget/num_cat.txt','rb') as f:
+            self.num_cat = cPickle.load(f,encoding='latin1')
             
     def add_custom_words(self,fid='roget/add_words.txt'):
-    ''' Load a file of words and connections into THES_DICT '''
+        ''' Load a file of words and connections into THES_DICT '''
         try:
             type(self.added_words) is list
         except:
@@ -43,8 +43,8 @@ class Roget:
                         self.thes_dict[wd_pair[0]].append(wd_pair[1])
 
         self.added_words = list(set(self.added_words))
-        print "Words Added to THES_DICT:"
-        print ' '.join(self.added_words)
+        print("Words Added to THES_DICT:")
+        print(' '.join(self.added_words))
 
     def make_wordlist(self,myText,lower=True):
         '''Removes punctuation and returns list of words; 'lower' flag determines case'''
@@ -309,19 +309,19 @@ class Roget:
         #notwords = list(set(notwords))
         word_basecats = []
         if verbose:
-            print "excluded words:",notwords
+            print("excluded words:",notwords)
         node_distances = []
         nodelist = self.full_childparent.keys()
         for ndx,node in enumerate(nodelist):
             dists = [ self.distance_to_node(word,node) for word in wordlist ]
             if verbose:
-                print dists
+                print(dists)
             aggdist = sum(dists)
             node_entry = (node,aggdist)
             node_distances.append(node_entry)
             avg_node_distance = aggdist/float(len(wordlist))
             if verbose:
-                print ndx,node,aggdist,avg_node_distance
+                print(ndx,node,aggdist,avg_node_distance)
         node_distances = sorted(node_distances,key=lambda x: x[1])
         node_distances_named = [ (node,self.node_codes[node],dist,(float(dist)/len(wordlist))) for (node,dist) in node_distances ]
         distlist = [ x[1] for x in node_distances ]
